@@ -21,8 +21,12 @@ export class PageJuegosComponent implements OnInit {
         console.log(res);
       })
   }
-  addJuego(juego){
-    console.log(this.juegoService.selectedJuego);
+  addJuego(){
+    //console.log(this.juegoService.selectedJuego);
+    this.juegoService.addJuego(this.juegoService.selectedJuego).subscribe(res => {
+      this.getJuegos();
+      console.log(res);
+    });
   }
   getImagen(juego){
     if(juego.imagen){

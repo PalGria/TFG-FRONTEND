@@ -16,4 +16,7 @@ export class JuegoService {
   getJuegos(){
     return this.http.get(this.URL_API);
   }
+  addJuego(juego){
+    return this.http.post(this.URL_API, juego);
+  }
 }

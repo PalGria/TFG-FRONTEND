@@ -4,7 +4,10 @@
 <div class="container">
   <div class="row">
     <div class="col-lg-4 juego" *ngFor="let juego of juegoService.juegos">
-      <div class="juego-title">{{juego.titulo}}</div>
+      <div class="row">
+          <div class="juego-title col-8">{{juego.titulo}}</div>
+          <div class="juego-title col-4">Ic</div>
+      </div>
       <img src="{{getImagen(juego)}}" alt="">
     </div>
   </div>
