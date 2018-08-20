@@ -5,6 +5,9 @@ img{
 .juego{
     margin-top: 5px;
 }
+.juego > img {
+    max-height: 200px;
+}
 .botones{
     margin-left: 20px;
     margin-top: 10px;
