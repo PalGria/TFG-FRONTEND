@@ -1,0 +1,23 @@
+img{
+    border: 1px;
+    border-style: solid;
+}
+.juego{
+    margin-top: 5px;
+}
+.botones{
+    margin-left: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+
+}
+.container{
+    text-align: center;
+}
+.juego-footer{
+    position: absolute;
+    bottom: 0;
+    background-color: rgba(0.5, 0.5, 0.5, 0.7);
+    color: white;
+    width: 100%;
+}
