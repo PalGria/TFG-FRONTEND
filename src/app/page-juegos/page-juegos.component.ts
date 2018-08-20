@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { JuegoService } from '../services/juego.service';
-import { Juego } from '../models/juego'; 
+import { Juego } from '../models/juego';
 @Component({
   selector: 'app-page-juegos',
   templateUrl: './page-juegos.component.html',
@@ -8,33 +8,54 @@ import { Juego } from '../models/juego';
 })
 export class PageJuegosComponent implements OnInit {
 
-  constructor( public juegoService: JuegoService ) {
-   }
-
+  constructor(public juegoService: JuegoService) {
+  }
+  editJuego(juego) {
+    this.juegoService.selectedJuego = juego;
+  }
+  cleanForm() {
+    this.juegoService.selectedJuego = new Juego;
+  }
   ngOnInit() {
     this.getJuegos();
   }
-  getJuegos(){
+  getJuegos() {
     this.juegoService.getJuegos()
-    .subscribe(res =>{
+      .subscribe(res => {
         this.juegoService.juegos = res as Juego[];
         console.log(res);
       })
   }
-  addJuego(){
+  addJuego() {
     //console.log(this.juegoService.selectedJuego);
-    this.juegoService.addJuego(this.juegoService.selectedJuego).subscribe(res => {
-      this.getJuegos();
-      console.log(res);
-    });
+    if (this.juegoService.selectedJuego.id_juego && this.juegoService.selectedJuego.id_juego != '') {
+      console.log("aylmao");
+      this.juegoService.editJuego(this.juegoService.selectedJuego).subscribe(res => {
+        this.getJuegos();
+        console.log(res);
+      });
+    }
+    else {
+      this.juegoService.addJuego(this.juegoService.selectedJuego).subscribe(res => {
+        this.getJuegos();
+        console.log(res);
+      });
+    }
   }
-  getImagen(juego){
-    if(juego.imagen){
+  getImagen(juego) {
+    if (juego.imagen) {
       return juego.imagen;
     }
-    else{
+    else {
       return "../../assets/placeholder1.jpg";
     }
   }
-
+  deleteJuego(juego) {
+    if (confirm('¿Está segur@ de que quiere eliminar el juego?')) {
+      this.juegoService.deleteJuego(juego.id_juego).subscribe(res => {
+        this.getJuegos();
+        console.log(res);
+      });
+    }
+  }
 }

@@ -1,12 +1,15 @@
 <div class="botones">
-  <button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModal">Añadir juego </button>
+  <button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModal" (click)="cleanForm()">Añadir juego </button>
 </div>
 <div class="container">
   <div class="row">
     <div class="col-lg-4 juego" *ngFor="let juego of juegoService.juegos">
       <div class="row">
           <div class="juego-title col-8">{{juego.titulo}}</div>
-          <div class="juego-title col-4">Ic</div>
+          <div class="juego-title col-4">
+            <i class="material-icons" style="font-size:30px;color:green;"  data-toggle="modal" data-target="#exampleModal" (click)="editJuego(juego)">create</i>
+            <i class="material-icons" style="font-size:30px;color:red;" (click)="deleteJuego(juego)">clear</i>
+          </div>
       </div>
       <img src="{{getImagen(juego)}}" alt="">
     </div>

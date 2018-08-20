@@ -8,6 +8,7 @@ import { AppComponent } from './app.component';
 import { MynavComponent } from './mynav/mynav.component';
 import { ContentComponent } from './content/content.component';
 import { PageJuegosComponent } from './page-juegos/page-juegos.component';
+import { PageMetricasComponent } from './page-metricas/page-metricas.component';
 
 const appRoutes: Routes = [
   { path: 'games', component: PageJuegosComponent}
@@ -19,7 +20,8 @@ const appRoutes: Routes = [
     AppComponent,
     MynavComponent,
     ContentComponent,
-    PageJuegosComponent
+    PageJuegosComponent,
+    PageMetricasComponent
   ],
   imports: [
     RouterModule.forRoot(appRoutes),

@@ -19,4 +19,10 @@ export class JuegoService {
   addJuego(juego){
     return this.http.post(this.URL_API, juego);
   }
+  editJuego(juego){
+    return this.http.put(this.URL_API + `/${juego.id_juego}`, juego);
+  }
+  deleteJuego(id){
+    return this.http.delete(this.URL_API + `/${id}`);
+  }
 }
