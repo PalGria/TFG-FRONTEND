@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from "@angular/router";
+import { JuegoService } from '../services/juego.service';
+import { Juego } from '../models/juego';
 
 @Component({
   selector: 'app-page-metricas',
@@ -6,10 +9,20 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./page-metricas.component.css']
 })
 export class PageMetricasComponent implements OnInit {
+  game: number; 
+  constructor(private route: ActivatedRoute, public juegoService: JuegoService) { 
 
-  constructor() { }
-
-  ngOnInit() {
   }
 
+  ngOnInit() {
+    this.game = +this.route.snapshot.params["id"];
+    this.getJuego();
+  }
+
+  getJuego(){
+    this.juegoService.getJuego(this.game).subscribe(res => {
+      this.juegoService.selectedJuego = (res as Juego)[0]; 
+      console.log(this.juegoService.selectedJuego);
+    });
+  }
 }

@@ -11,7 +11,9 @@ import { PageJuegosComponent } from './page-juegos/page-juegos.component';
 import { PageMetricasComponent } from './page-metricas/page-metricas.component';
 
 const appRoutes: Routes = [
-  { path: 'games', component: PageJuegosComponent}
+  { path: 'games', component: PageJuegosComponent},
+  { path: 'games/:id', component: PageMetricasComponent}
+
 ];  
 @NgModule({
 

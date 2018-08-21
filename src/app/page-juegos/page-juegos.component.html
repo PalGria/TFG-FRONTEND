@@ -5,7 +5,7 @@
   <div class="row">
     <div class="col-lg-4 juego" *ngFor="let juego of juegoService.juegos">
       <div class="row">
-          <div class="juego-title col-8">{{juego.titulo}}</div>
+          <div class="juego-title col-8"><a [routerLink]="['/games', juego.id_juego]" >{{juego.titulo}}</a></div>
           <div class="juego-title col-4">
             <i class="material-icons" style="font-size:30px;color:green;"  data-toggle="modal" data-target="#exampleModal" (click)="editJuego(juego)">create</i>
             <i class="material-icons" style="font-size:30px;color:red;" (click)="deleteJuego(juego)">clear</i>
