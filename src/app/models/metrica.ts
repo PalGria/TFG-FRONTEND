@@ -9,6 +9,8 @@ export class Metrica {
         this.datosX = [];
         this.datosY = [];
         this.datosZ = [];
+        this.chart = [];
+        this.canvas = "";
     }
 
     id_metrica: string;
@@ -19,5 +21,7 @@ export class Metrica {
     datosX: any;
     datosY: any;
     datosZ: any;
+    chart: any;
+    canvas: string; 
 
 }

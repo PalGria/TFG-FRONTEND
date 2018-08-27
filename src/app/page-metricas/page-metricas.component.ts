@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit ,AfterViewInit} from '@angular/core';
 import { ActivatedRoute } from "@angular/router";
 import { JuegoService } from '../services/juego.service';
 import { MetricaService } from '../services/metrica.service';
@@ -11,150 +11,132 @@ import { Metrica } from '../models/metrica';
   templateUrl: './page-metricas.component.html',
   styleUrls: ['./page-metricas.component.css']
 })
-export class PageMetricasComponent implements OnInit {
-  game: number; 
-  charts : any = []; 
-  constructor(private route: ActivatedRoute, public juegoService: JuegoService, public metricaService: MetricaService) { 
+export class PageMetricasComponent implements OnInit, AfterViewInit {
+  game: number;
+  charts: any = [];
+  constructor(private route: ActivatedRoute, public juegoService: JuegoService, public metricaService: MetricaService) {
 
   }
 
-  ngOnInit() {
+  async ngOnInit() {
+    console.log(1);
     this.game = +this.route.snapshot.params["id"];
     this.getJuego();
     this.getMetricas();
-    this.charts[0] = {};
-    this.charts[1] = {};
-    this.charts[0].canvas ='canvas1';
-    this.charts[1].canvas ='canvas2';
-    this.charts[0].chart = [];
-    this.charts[1].chart = [];
-  
 
   }
-  ngAfterViewInit(){
-    let chart1 = new Chart('canvas1', {
-      type: 'bar',
-      data: {
-          labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-          datasets: [{
-              label: '# of Votes',
-              data: [12, 19, 3, 5, 2, 3],
-              backgroundColor: [
-                  'rgba(255, 99, 132, 0.2)',
-                  'rgba(54, 162, 235, 0.2)',
-                  'rgba(255, 206, 86, 0.2)',
-                  'rgba(75, 192, 192, 0.2)',
-                  'rgba(153, 102, 255, 0.2)',
-                  'rgba(255, 159, 64, 0.2)'
-              ],
-              borderColor: [
-                  'rgba(255,99,132,1)',
-                  'rgba(54, 162, 235, 1)',
-                  'rgba(255, 206, 86, 1)',
-                  'rgba(75, 192, 192, 1)',
-                  'rgba(153, 102, 255, 1)',
-                  'rgba(255, 159, 64, 1)'
-              ],
-              borderWidth: 1
-          }]
-      },
-      options: {
-          scales: {
-              yAxes: [{
-                  ticks: {
-                      beginAtZero:true
-                  }
-              }]
-          }
-      }
-  });
-  let chart2 = new Chart('canvas2', {
-    type: 'bar',
-    data: {
-        labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-        datasets: [{
-            label: '# of Votes',
-            data: [12, 19, 3, 5, 2, 3],
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(255, 159, 64, 0.2)'
-            ],
-            borderColor: [
-                'rgba(255,99,132,1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)'
-            ],
-            borderWidth: 1
-        }]
-    },
-    options: {
-        scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero:true
-                }
-            }]
-        }
-    }
-});
-  this.charts[0].chart = chart1;
-  this.charts[1].chart = chart2;
+  ngAfterViewInit() {
+
   }
-  getJuego(){
+  getJuego() {
     this.juegoService.getJuego(this.game).subscribe(res => {
-      this.juegoService.selectedJuego = (res as Juego)[0]; 
+      this.juegoService.selectedJuego = (res as Juego)[0];
       console.log(this.juegoService.selectedJuego);
     });
   }
+  getChart(){
+    
+  }
   getMetricas() {
+    console.log(2);
     this.metricaService.getMetricas()
       .subscribe(res => {
+        console.log(3);
         this.metricaService.metricas = res as Metrica[];
-        for(let metrica of this.metricaService.metricas){
-            this.poblarMetrica(metrica);
+        console.log(this.metricaService.metricas);
+        for (let metrica of this.metricaService.metricas) {
+          metrica.canvas = "canvas" + metrica.id_metrica;
+          this.poblarMetrica(metrica);
         }
         console.log(res);
 
       })
   }
-  poblarMetrica(metrica){
-    this.metricaService.getValoresMetrica(metrica.id_metrica)
-    .subscribe(res => {
-        let valores : any = res;
+  crearCharts(metrica){
+    console.log("Hola?");
+      metrica.chart = new Chart(metrica.canvas, {
+        type: 'bar',
+        data: {
+          labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+          datasets: [{
+            label: '# of Votes',
+            data: metrica.datosX,
+            backgroundColor: [
+              'rgba(255, 99, 132, 0.2)',
+              'rgba(54, 162, 235, 0.2)',
+              'rgba(255, 206, 86, 0.2)',
+              'rgba(75, 192, 192, 0.2)',
+              'rgba(153, 102, 255, 0.2)',
+              'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+              'rgba(255,99,132,1)',
+              'rgba(54, 162, 235, 1)',
+              'rgba(255, 206, 86, 1)',
+              'rgba(75, 192, 192, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+            yAxes: [{
+              ticks: {
+                beginAtZero: true
+              }
+            }]
+          }
+        }
+      });
+      //buscamos la metrica y la metemos
+      console.log(metrica);
+      for (let i = 0; i < this.metricaService.metricas.length; i++) {
+        if (this.metricaService.metricas[i].id_metrica == metrica.id_metrica) {
+          this.metricaService.metricas[i] = metrica;
+          break;
+        }
+      }
+    console.log("Fin de crear metrica?");
+    console.log(this.metricaService.metricas);
 
-        console.log(valores);
-        if(valores.result[0].X){
+  }
+  async poblarMetrica(metrica) {
+    this.metricaService.getValoresMetrica(metrica.id_metrica)
+      .subscribe(res => {
+        let valores: any = res;
+        //COMPROBAMOS SI TENEMOS VALORES EN X Y O Z
+        if (valores.result[0]) {
+          console.log(valores.result[0]);
+          if (valores.result[0].X) {
             metrica.datosX = [];
-        }
-        if(valores.result[0].Y){
+          }
+          if (valores.result[0].Y) {
             metrica.datosY = [];
-        }
-        if(valores.result[0].Z){
+          }
+          if (valores.result[0].Z) {
             metrica.datosZ = [];
-        }
-        for (let valor of valores.result){
-            if(valor.X){
-                metrica.datosX.push (valor.X);
+          }
+          //POBLAMOS LA METRICA
+          for (let valor of valores.result) {
+            if (valor.X) {
+              metrica.datosX.push(valor.X);
             }
-            if(valor.Y){
-                metrica.datosY.push (valor.Y);
+            if (valor.Y) {
+              metrica.datosY.push(valor.Y);
             }
-            if(valor.Z){
-                metrica.datosZ.push (valor.Z);
+            if (valor.Z) {
+              metrica.datosZ.push(valor.Z);
             }
-        }
-        for (let i = 0; i < this.metricaService.metricas.length ; i++){
-            if(this.metricaService.metricas[i].id_metrica == metrica.id_metrica){
-                this.metricaService.metricas[i] = metrica;
-                break;
+          }
+          this.crearCharts(metrica);
+          for (let i = 0; i < this.metricaService.metricas.length; i++) {
+            if (this.metricaService.metricas[i].id_metrica == metrica.id_metrica) {
+              this.metricaService.metricas[i] = metrica;
+              break;
             }
+          }
         }
       })
   }
