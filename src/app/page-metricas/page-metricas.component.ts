@@ -1,4 +1,4 @@
-import { Component, OnInit ,AfterViewInit} from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { ActivatedRoute } from "@angular/router";
 import { JuegoService } from '../services/juego.service';
 import { MetricaService } from '../services/metrica.service';
@@ -34,8 +34,8 @@ export class PageMetricasComponent implements OnInit, AfterViewInit {
       console.log(this.juegoService.selectedJuego);
     });
   }
-  getChart(){
-    
+  getChart() {
+
   }
   getMetricas() {
     console.log(2);
@@ -46,58 +46,58 @@ export class PageMetricasComponent implements OnInit, AfterViewInit {
         console.log(this.metricaService.metricas);
         for (let metrica of this.metricaService.metricas) {
           metrica.canvas = "canvas" + metrica.id_metrica;
-          this.poblarMetrica(metrica);
+          //this.poblarMetrica(metrica);
         }
         console.log(res);
 
       })
   }
-  crearCharts(metrica){
+  crearCharts(metrica) {
     console.log("Hola?");
-      metrica.chart = new Chart(metrica.canvas, {
-        type: 'bar',
-        data: {
-          labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-          datasets: [{
-            label: '# of Votes',
-            data: metrica.datosX,
-            backgroundColor: [
-              'rgba(255, 99, 132, 0.2)',
-              'rgba(54, 162, 235, 0.2)',
-              'rgba(255, 206, 86, 0.2)',
-              'rgba(75, 192, 192, 0.2)',
-              'rgba(153, 102, 255, 0.2)',
-              'rgba(255, 159, 64, 0.2)'
-            ],
-            borderColor: [
-              'rgba(255,99,132,1)',
-              'rgba(54, 162, 235, 1)',
-              'rgba(255, 206, 86, 1)',
-              'rgba(75, 192, 192, 1)',
-              'rgba(153, 102, 255, 1)',
-              'rgba(255, 159, 64, 1)'
-            ],
-            borderWidth: 1
+    metrica.chart = new Chart(metrica.canvas, {
+      type: 'bar',
+      data: {
+        labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+        datasets: [{
+          label: '# of Votes',
+          data: metrica.datosX,
+          backgroundColor: [
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(255, 206, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+            'rgba(255, 159, 64, 0.2)'
+          ],
+          borderColor: [
+            'rgba(255,99,132,1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)'
+          ],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          yAxes: [{
+            ticks: {
+              beginAtZero: true
+            }
           }]
-        },
-        options: {
-          scales: {
-            yAxes: [{
-              ticks: {
-                beginAtZero: true
-              }
-            }]
-          }
-        }
-      });
-      //buscamos la metrica y la metemos
-      console.log(metrica);
-      for (let i = 0; i < this.metricaService.metricas.length; i++) {
-        if (this.metricaService.metricas[i].id_metrica == metrica.id_metrica) {
-          this.metricaService.metricas[i] = metrica;
-          break;
         }
       }
+    });
+    //buscamos la metrica y la metemos
+    console.log(metrica);
+    for (let i = 0; i < this.metricaService.metricas.length; i++) {
+      if (this.metricaService.metricas[i].id_metrica == metrica.id_metrica) {
+        this.metricaService.metricas[i] = metrica;
+        break;
+      }
+    }
     console.log("Fin de crear metrica?");
     console.log(this.metricaService.metricas);
 
@@ -106,6 +106,7 @@ export class PageMetricasComponent implements OnInit, AfterViewInit {
     this.metricaService.getValoresMetrica(metrica.id_metrica)
       .subscribe(res => {
         let valores: any = res;
+
         //COMPROBAMOS SI TENEMOS VALORES EN X Y O Z
         if (valores.result[0]) {
           console.log(valores.result[0]);
@@ -140,4 +141,37 @@ export class PageMetricasComponent implements OnInit, AfterViewInit {
         }
       })
   }
+  addMetrica() {
+    this.metricaService.selectedMetrica.juego = this.game;
+    if (this.metricaService.selectedMetrica.id_metrica && this.metricaService.selectedMetrica.id_metrica != '') {
+      console.log("aylmao");
+      this.metricaService.editMetrica(this.metricaService.selectedMetrica).subscribe(res => {
+        this.getMetricas();
+        console.log(res);
+      });
+    }
+    else {
+      this.metricaService.addMetrica(this.metricaService.selectedMetrica).subscribe(res => {
+        this.getMetricas();
+        console.log(res);
+      });
+    }
+  }
+  cleanForm() {
+    this.metricaService.selectedMetrica = new Metrica;
+  }
+  editMetrica(metrica){
+    console.log(metrica);
+    this.metricaService.selectedMetrica = metrica;
+    console.log(this.metricaService.selectedMetrica);
+  }
+  deleteMetrica(metrica) {
+    if (confirm('¿Está segur@ de que quiere eliminar la métrica?')) {
+      this.metricaService.deleteMetrica(metrica.id_metrica).subscribe(res => {
+        this.getMetricas();
+        console.log(res);
+      });
+    }
+  }
+
 }

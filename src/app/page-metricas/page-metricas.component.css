@@ -1,0 +1,15 @@
+.metrica{
+    position: relative;
+}
+.icons{
+    position: absolute;
+    right: 0;
+}
+.delete{
+    font-size:30px;
+    color:red;
+}
+.edit{
+    font-size:30px;
+    color:green;
+}
