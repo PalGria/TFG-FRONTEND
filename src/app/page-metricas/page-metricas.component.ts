@@ -14,8 +14,8 @@ import { Metrica } from '../models/metrica';
 export class PageMetricasComponent implements OnInit, AfterViewInit {
   game: number;
   charts: any = [];
+  tipos: any = ['bar-vertical','bar-horizontal', 'bar-multiaxis','line-basic', 'radar', 'pie','doghnut'];
   constructor(private route: ActivatedRoute, public juegoService: JuegoService, public metricaService: MetricaService) {
-
   }
 
   async ngOnInit() {
@@ -28,6 +28,7 @@ export class PageMetricasComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
 
   }
+
   getJuego() {
     this.juegoService.getJuego(this.game).subscribe(res => {
       this.juegoService.selectedJuego = (res as Juego)[0];
