@@ -2,6 +2,7 @@ import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { ActivatedRoute } from "@angular/router";
 import { JuegoService } from '../services/juego.service';
 import { MetricaService } from '../services/metrica.service';
+import { VariablesService } from '../services/variables.service';
 import { Juego } from '../models/juego';
 import { Chart, ChartData, Point } from "chart.js";
 import { Metrica } from '../models/metrica';
@@ -15,7 +16,7 @@ export class PageMetricasComponent implements OnInit, AfterViewInit {
   game: number;
   charts: any = [];
   tipos: any = ['bar-vertical','bar-horizontal', 'bar-multiaxis','line-basic', 'radar', 'pie','doghnut'];
-  constructor(private route: ActivatedRoute, public juegoService: JuegoService, public metricaService: MetricaService) {
+  constructor(private route: ActivatedRoute, public juegoService: JuegoService, public metricaService: MetricaService, public variablesService: VariablesService) {
   }
 
   async ngOnInit() {
@@ -28,7 +29,30 @@ export class PageMetricasComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
 
   }
+  getVariables(){
+    this.metricaService.getMetricas()
+      .subscribe(res => {
+        this.metricaService.metricas = res as Metrica[];
+        console.log(res);
 
+      })
+  }
+  addVariable(){
+    //console.log(this.juegoService.selectedJuego);
+    if (this.variablesService.selectedVariable.id_variable && this.variablesService.selectedVariable.id_variable != '') {
+      console.log("aylmao");
+      this.variablesService.editVariable(this.variablesService.selectedVariable).subscribe(res => {
+        this.getVariables();
+        console.log(res);
+      });
+    }
+    else {
+      this.variablesService.addVariable(this.variablesService.selectedVariable).subscribe(res => {
+        this.getVariables();
+        console.log(res);
+      });
+    }
+  }
   getJuego() {
     this.juegoService.getJuego(this.game).subscribe(res => {
       this.juegoService.selectedJuego = (res as Juego)[0];
@@ -39,7 +63,6 @@ export class PageMetricasComponent implements OnInit, AfterViewInit {
 
   }
   getMetricas() {
-    console.log(2);
     this.metricaService.getMetricas()
       .subscribe(res => {
         console.log(3);

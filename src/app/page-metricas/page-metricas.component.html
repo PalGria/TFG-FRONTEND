@@ -1,55 +1,151 @@
 <div class="botones">
-  <button type="button" class="btn btn-success" data-toggle="modal" data-target="#metricaModal" (click)="cleanForm()">Añadir métrica </button>
-  <button type="button" class="btn btn-success" data-toggle="modal" data-target="#variablesModal">Administrar variables </button>
+    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#metricaModal" (click)="cleanForm()">Añadir
+        métrica </button>
+    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#variablesModal">Administrar
+        variables </button>
 
 </div>
 
 <div class="container">
-  <div class="row">
-    <div class="col-6 metrica" *ngFor="let metrica of metricaService.metricas">
-      <div class="icons">
-        <i class="material-icons delete" (click)="deleteMetrica(metrica)">clear</i>
-        <i class="material-icons edit" (click)="editMetrica(metrica)" data-toggle="modal" data-target="#metricaModal">create</i>
-      </div>
+    <div class="row">
+        <div class="col-6 metrica" *ngFor="let metrica of metricaService.metricas">
+            <div class="icons">
+                <i class="material-icons delete" (click)="deleteMetrica(metrica)">clear</i>
+                <i class="material-icons edit" (click)="editMetrica(metrica)" data-toggle="modal" data-target="#metricaModal">create</i>
+            </div>
 
-      <h5>{{metrica.nombre}}</h5>
-      <div>
-        {{metrica.canvas}}
-        <canvas id="{{metrica.canvas}}">{{ metrica.chart }}</canvas>
-      </div>
+            <h5>{{metrica.nombre}}</h5>
+            <div>
+                {{metrica.canvas}}
+                <canvas id="{{metrica.canvas}}">{{ metrica.chart }}</canvas>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 
-<!-- Modal -->
+<!-- Modal Metrica-->
 <div class="modal fade" id="metricaModal" tabindex="-1" role="dialog" aria-labelledby="metricaModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="metricaModalLabel">Modal title</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form class="form-group" #menuForm="ngForm">
-          <input type="hidden" name="id" #id="ngModel" [(ngModel)]="metricaService.selectedMetrica.id_metrica">
-          <label for="nombre" class="col-form-label">Título:</label>
-          <input type="text" class="form-control" id="nombre" name="nombre" #titulo="ngModel" [(ngModel)]="metricaService.selectedMetrica.nombre">
-            <label for="tipo" class="col-form-label">Tipo:</label>
-            <select class="form-control" id="tipo" name="tipo" #categoria="ngModel" [(ngModel)]="metricaService.selectedMetrica.tipo">
-                <option selected disabled >{{metricaService.selectedMetrica.tipo}}</option>
-                <option *ngFor="let tipo of tipos">{{tipo}}</option>    
-            </select>
-          <!-- esto tiene que ser lo que viene a ser un select con los tipos de metrica-->
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-            <button (click)="addMetrica()" type="button" class="btn btn-primary" data-dismiss="modal">Guardar cambios
-            </button>
-          </div>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="metricaModalLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="form-group" #menuForm="ngForm">
+                    <input type="hidden" name="id" #id="ngModel" [(ngModel)]="metricaService.selectedMetrica.id_metrica">
+                    <label for="nombre" class="col-form-label">Título:</label>
+                    <input type="text" class="form-control" id="nombre" name="nombre" #titulo="ngModel" [(ngModel)]="metricaService.selectedMetrica.nombre">
+                    <label for="tipo" class="col-form-label">Tipo:</label>
+                    <select class="form-control" id="tipo" name="tipo" #categoria="ngModel" [(ngModel)]="metricaService.selectedMetrica.tipo">
+                        <option selected disabled>{{metricaService.selectedMetrica.tipo}}</option>
+                        <option *ngFor="let tipo of tipos">{{tipo}}</option>
+                    </select>
+                    <div>
+                        <div style="margin-bottom: 5px">Variables:</div>
+                        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample"
+                            aria-expanded="false" aria-controls="collapseExample">
+                            Añadir variables
+                        </button>
+                    </div>
+                    <div class="collapse" id="collapseExample">
+                        <div class="card card-body">
+                            Metemos aquí lo que viene siendo las variables totales.
+                        </div>
+                    </div>
 
-        </form>
-      </div>
+                    <!-- esto tiene que ser lo que viene a ser un select con los tipos de metrica-->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <button (click)="addMetrica()" type="button" class="btn btn-primary" data-dismiss="modal">Guardar
+                            cambios
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
     </div>
-  </div>
+</div>
+<!-- Modal Variables-->
+<div class="modal fade" id="variablesModal" tabindex="-1" role="dialog" aria-labelledby="variablesModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="variablesModalLabel">Administrar Variables</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+
+            <div class="modal-body">
+                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseAdminVars"
+                    aria-expanded="false" aria-controls="collapseAdminVars">
+                    Añadir variable
+                </button>
+                <div class="collapse" id="collapseAdminVars">
+                    <div class="card card-body">
+                        <form class="form-group" #menuForm="ngForm">
+                            <input type="hidden" name="id" #id="ngModel" [(ngModel)]="metricaService.selectedMetrica.id_metrica">
+                            <label for="nombre" class="col-form-label">Título:</label>
+                            <input type="text" class="form-control" id="nombre" name="nombre" #titulo="ngModel"
+                                [(ngModel)]="metricaService.selectedMetrica.nombre">
+                            <label for="tipo" class="col-form-label">Tipo:</label>
+                            <select class="form-control" id="tipo" name="tipo" #categoria="ngModel" [(ngModel)]="metricaService.selectedMetrica.tipo">
+                                <option selected disabled>{{metricaService.selectedMetrica.tipo}}</option>
+                                <option *ngFor="let tipo of tipos">{{tipo}}</option>
+                            </select>
+                            <div>
+                                <div style="margin-bottom: 5px">Variables:</div>
+                                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample"
+                                    aria-expanded="false" aria-controls="collapseExample">
+                                    Añadir variables
+                                </button>
+                            </div>
+                            <div class="collapse" id="collapseExample">
+                                <div class="card card-body">
+                                    Metemos aquí lo que viene siendo las variables totales.
+                                </div>
+                            </div>
+
+                            <!-- esto tiene que ser lo que viene a ser un select con los tipos de metrica-->
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                <button (click)="addMetrica()" type="button" class="btn btn-primary" data-dismiss="modal">Guardar
+                                    cambios
+                                </button>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Id</th>
+                            <th scope="col">Nombre Variable</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row">1</th>
+                            <td>Mark</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">2</th>
+                            <td>Jacob</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">3</th>
+                            <td>Larry</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
