@@ -6,6 +6,8 @@ import { VariablesService } from '../services/variables.service';
 import { Juego } from '../models/juego';
 import { Chart, ChartData, Point } from "chart.js";
 import { Metrica } from '../models/metrica';
+import { Variable } from '@angular/compiler/src/render3/r3_ast';
+import { Variables } from '../models/variables';
 
 @Component({
   selector: 'app-page-metricas',
@@ -24,16 +26,18 @@ export class PageMetricasComponent implements OnInit, AfterViewInit {
     this.game = +this.route.snapshot.params["id"];
     this.getJuego();
     this.getMetricas();
-
+    this.getVariables();
   }
   ngAfterViewInit() {
 
   }
   getVariables(){
-    this.metricaService.getMetricas()
+    
+    console.log("acho");
+    this.variablesService.getVariables()
       .subscribe(res => {
-        this.metricaService.metricas = res as Metrica[];
-        console.log(res);
+        this.variablesService.variables = res as Variables[];
+        console.log(this.variablesService.variables );
 
       })
   }
@@ -59,7 +63,17 @@ export class PageMetricasComponent implements OnInit, AfterViewInit {
       console.log(this.juegoService.selectedJuego);
     });
   }
-  getChart() {
+  editVariable(variable){
+    console.log(variable);
+    this.variablesService.selectedVariable = variable;
+  }
+  deleteVariable(variable){
+    if (confirm('¿Está segur@ de que quiere eliminar la variable?')) {
+      this.variablesService.deleteVariable(variable.id_variable).subscribe(res => {
+        this.getVariables();
+        console.log(res);
+      });
+    }
 
   }
   getMetricas() {

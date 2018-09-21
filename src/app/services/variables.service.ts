@@ -8,7 +8,7 @@ import { Variables } from '../models/variables';
 })
 export class VariablesService {
   selectedVariable: Variables;
-  metricas: Variables[];
+  variables: Variables[];
   readonly URL_API = 'http://localhost:3000/api/valores';
 
   constructor(private http: HttpClient) {

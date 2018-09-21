@@ -90,21 +90,12 @@
                 <div class="collapse" id="collapseAdminVars">
                     <div class="card card-body">
                         <form class="form-group" #menuForm="ngForm">
-                            <input type="hidden" name="id" #id="ngModel" [(ngModel)]="metricaService.selectedMetrica.id_metrica">
+                            <input type="hidden" name="id" #id="ngModel" [(ngModel)]="variablesService.selectedVariable.id_variable">
                             <label for="nombre" class="col-form-label">Título:</label>
                             <input type="text" class="form-control" id="nombre" name="nombre" #titulo="ngModel"
-                                [(ngModel)]="metricaService.selectedMetrica.nombre">
-                            <label for="tipo" class="col-form-label">Tipo:</label>
-                            <select class="form-control" id="tipo" name="tipo" #categoria="ngModel" [(ngModel)]="metricaService.selectedMetrica.tipo">
-                                <option selected disabled>{{metricaService.selectedMetrica.tipo}}</option>
-                                <option *ngFor="let tipo of tipos">{{tipo}}</option>
-                            </select>
+                                [(ngModel)]="variablesService.selectedVariable.nombre">
                             <div>
                                 <div style="margin-bottom: 5px">Variables:</div>
-                                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample"
-                                    aria-expanded="false" aria-controls="collapseExample">
-                                    Añadir variables
-                                </button>
                             </div>
                             <div class="collapse" id="collapseExample">
                                 <div class="card card-body">
@@ -114,8 +105,7 @@
 
                             <!-- esto tiene que ser lo que viene a ser un select con los tipos de metrica-->
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                                <button (click)="addMetrica()" type="button" class="btn btn-primary" data-dismiss="modal">Guardar
+                                <button (click)="addVariable()" type="button" class="btn btn-primary">Guardar
                                     cambios
                                 </button>
                             </div>
@@ -128,20 +118,26 @@
                         <tr>
                             <th scope="col">Id</th>
                             <th scope="col">Nombre Variable</th>
+                            <th scope="col"></th>
+                            <th scope="col">X</th>
+                            <th scope="col">Y</th>
+                            <th scope="col">Z</th>
+
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Mark</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">2</th>
-                            <td>Jacob</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">3</th>
-                            <td>Larry</td>
+                        <tr *ngFor="let variable of variablesService.variables">
+                            <th scope="row">{{variable.id_metrica_valores}}</th>
+                            <td>{{variable.nombre}}</td>
+                            <td>
+                                <i class="material-icons delete" (click)="deleteVariable(variable)">clear</i>
+                                <i class="material-icons edit" (click)="editVariable(variable)" data-toggle="collapse" data-target="#collapseAdminVars"
+                                aria-expanded="false" aria-controls="collapseAdminVars">create</i>
+                            </td>
+                            <td>{{variable.X}}</td>
+                            <td>{{variable.Y}}</td>
+                            <td>{{variable.Z}}</td>
+
                         </tr>
                     </tbody>
                 </table>
