@@ -24,7 +24,7 @@ export class VariablesService {
     return this.http.post(this.URL_API, variable);
   }
   editVariable(variable){
-    return this.http.put(this.URL_API + `/${variable.id_variable}`, variable);
+    return this.http.put(this.URL_API + `/${variable.id_metrica_valores}`, variable);
   }
   deleteVariable(id){
     return this.http.delete(this.URL_API + `/${id}`);

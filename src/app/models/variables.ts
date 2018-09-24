@@ -1,7 +1,7 @@
 export class Variables {
 
     constructor(id_metrica_valores = '', nombre = '',tipo = '' ,  juego = 0 , data_created = new Date()){
-        this.id_variable = id_metrica_valores;
+        this.id_metrica_valores = id_metrica_valores;
         this.nombre = nombre;
         this.juego = juego;
         this.data_created = data_created;
@@ -9,7 +9,7 @@ export class Variables {
         this.Y = [];
         this.Z = [];
     }
-    id_variable: string;
+    id_metrica_valores: string;
     nombre: string;
     juego: number;
     data_created: Date;

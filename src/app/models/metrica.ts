@@ -6,11 +6,9 @@ export class Metrica {
         this.tipo = tipo;
         this.juego = juego;
         this.data_created = data_created;
-        this.datosX = [];
-        this.datosY = [];
-        this.datosZ = [];
         this.chart = [];
         this.canvas = "";
+        this.variables = []; 
     }
 
     id_metrica: string;
@@ -18,9 +16,7 @@ export class Metrica {
     tipo: string;
     juego: number;
     data_created: Date;
-    datosX: any;
-    datosY: any;
-    datosZ: any;
+    variables: any; 
     chart: any;
     canvas: string; 
 

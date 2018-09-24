@@ -90,7 +90,7 @@
                 <div class="collapse" id="collapseAdminVars">
                     <div class="card card-body">
                         <form class="form-group" #menuForm="ngForm">
-                            <input type="hidden" name="id" #id="ngModel" [(ngModel)]="variablesService.selectedVariable.id_variable">
+                            <input type="hidden" name="id" #id="ngModel" [(ngModel)]="variablesService.selectedVariable.id_metrica_valores">
                             <label for="nombre" class="col-form-label">Título:</label>
                             <input type="text" class="form-control" id="nombre" name="nombre" #titulo="ngModel"
                                 [(ngModel)]="variablesService.selectedVariable.nombre">
@@ -105,7 +105,7 @@
 
                             <!-- esto tiene que ser lo que viene a ser un select con los tipos de metrica-->
                             <div class="modal-footer">
-                                <button (click)="addVariable()" type="button" class="btn btn-primary">Guardar
+                                <button (click)="addVariable()" type="button" class="btn btn-primary" data-toggle="collapse" data-target="#collapseAdminVars">Guardar
                                     cambios
                                 </button>
                             </div>

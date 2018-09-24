@@ -29,6 +29,7 @@ export class PageMetricasComponent implements OnInit, AfterViewInit {
     this.getVariables();
   }
   ngAfterViewInit() {
+    this.getMetricas(2);
 
   }
   getVariables(){
@@ -43,16 +44,18 @@ export class PageMetricasComponent implements OnInit, AfterViewInit {
   }
   addVariable(){
     //console.log(this.juegoService.selectedJuego);
-    if (this.variablesService.selectedVariable.id_variable && this.variablesService.selectedVariable.id_variable != '') {
+    if (this.variablesService.selectedVariable.id_metrica_valores && this.variablesService.selectedVariable.id_metrica_valores != '') {
       console.log("aylmao");
       this.variablesService.editVariable(this.variablesService.selectedVariable).subscribe(res => {
         this.getVariables();
+        this.cleanVarForm()
         console.log(res);
       });
     }
     else {
       this.variablesService.addVariable(this.variablesService.selectedVariable).subscribe(res => {
         this.getVariables();
+        this.cleanVarForm()
         console.log(res);
       });
     }
@@ -68,30 +71,36 @@ export class PageMetricasComponent implements OnInit, AfterViewInit {
     this.variablesService.selectedVariable = variable;
   }
   deleteVariable(variable){
+    console.log(variable);
     if (confirm('¿Está segur@ de que quiere eliminar la variable?')) {
-      this.variablesService.deleteVariable(variable.id_variable).subscribe(res => {
+      this.variablesService.deleteVariable(variable.id_metrica_valores).subscribe(res => {
         this.getVariables();
         console.log(res);
       });
     }
 
   }
-  getMetricas() {
+  getMetricas(flag = 1) {
     this.metricaService.getMetricas()
       .subscribe(res => {
         console.log(3);
         this.metricaService.metricas = res as Metrica[];
         console.log(this.metricaService.metricas);
-        for (let metrica of this.metricaService.metricas) {
-          metrica.canvas = "canvas" + metrica.id_metrica;
-          //this.poblarMetrica(metrica);
+        if (flag == 1){
+          for (let metrica of this.metricaService.metricas) {
+            metrica.canvas = "canvas" + metrica.id_metrica;
+            this.crearCharts(metrica);
+          }
         }
         console.log(res);
-
       })
+  }
+  cleanVarForm(){
+    this.variablesService.selectedVariable = new Variables; 
   }
   crearCharts(metrica) {
     console.log("Hola?");
+    
     metrica.chart = new Chart(metrica.canvas, {
       type: 'bar',
       data: {
@@ -128,6 +137,7 @@ export class PageMetricasComponent implements OnInit, AfterViewInit {
         }
       }
     });
+    /*
     //buscamos la metrica y la metemos
     console.log(metrica);
     for (let i = 0; i < this.metricaService.metricas.length; i++) {
@@ -138,46 +148,9 @@ export class PageMetricasComponent implements OnInit, AfterViewInit {
     }
     console.log("Fin de crear metrica?");
     console.log(this.metricaService.metricas);
-
+*/
   }
   async poblarMetrica(metrica) {
-    this.metricaService.getValoresMetrica(metrica.id_metrica)
-      .subscribe(res => {
-        let valores: any = res;
-
-        //COMPROBAMOS SI TENEMOS VALORES EN X Y O Z
-        if (valores.result[0]) {
-          console.log(valores.result[0]);
-          if (valores.result[0].X) {
-            metrica.datosX = [];
-          }
-          if (valores.result[0].Y) {
-            metrica.datosY = [];
-          }
-          if (valores.result[0].Z) {
-            metrica.datosZ = [];
-          }
-          //POBLAMOS LA METRICA
-          for (let valor of valores.result) {
-            if (valor.X) {
-              metrica.datosX.push(valor.X);
-            }
-            if (valor.Y) {
-              metrica.datosY.push(valor.Y);
-            }
-            if (valor.Z) {
-              metrica.datosZ.push(valor.Z);
-            }
-          }
-          this.crearCharts(metrica);
-          for (let i = 0; i < this.metricaService.metricas.length; i++) {
-            if (this.metricaService.metricas[i].id_metrica == metrica.id_metrica) {
-              this.metricaService.metricas[i] = metrica;
-              break;
-            }
-          }
-        }
-      })
   }
   addMetrica() {
     this.metricaService.selectedMetrica.juego = this.game;
