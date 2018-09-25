@@ -22,7 +22,6 @@ export class PageMetricasComponent implements OnInit, AfterViewInit {
   }
 
   async ngOnInit() {
-    console.log(1);
     this.game = +this.route.snapshot.params["id"];
     this.getJuego();
     this.getMetricas();
@@ -34,7 +33,6 @@ export class PageMetricasComponent implements OnInit, AfterViewInit {
   }
   getVariables(){
     
-    console.log("acho");
     this.variablesService.getVariables()
       .subscribe(res => {
         this.variablesService.variables = res as Variables[];
@@ -83,23 +81,21 @@ export class PageMetricasComponent implements OnInit, AfterViewInit {
   getMetricas(flag = 1) {
     this.metricaService.getMetricas()
       .subscribe(res => {
-        console.log(3);
         this.metricaService.metricas = res as Metrica[];
         console.log(this.metricaService.metricas);
-        if (flag == 1){
+        console.log(flag);
+        if (flag == 2){
           for (let metrica of this.metricaService.metricas) {
             metrica.canvas = "canvas" + metrica.id_metrica;
             this.crearCharts(metrica);
           }
         }
-        console.log(res);
       })
   }
   cleanVarForm(){
     this.variablesService.selectedVariable = new Variables; 
   }
   crearCharts(metrica) {
-    console.log("Hola?");
     
     metrica.chart = new Chart(metrica.canvas, {
       type: 'bar',
