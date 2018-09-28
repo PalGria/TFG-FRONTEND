@@ -15,9 +15,11 @@ import { Variables } from '../models/variables';
   styleUrls: ['./page-metricas.component.css']
 })
 export class PageMetricasComponent implements OnInit, AfterViewInit {
+  chart0: any = [];
+  canvases : any = [];
   game: number;
-  charts: any = [];
-  tipos: any = ['bar-vertical','bar-horizontal', 'bar-multiaxis','line-basic', 'radar', 'pie','doghnut'];
+  charts: any = {};
+  tipos: any = ['bar-vertical', 'bar-horizontal', 'bar-multiaxis', 'line-basic', 'radar', 'pie', 'doghnut'];
   constructor(private route: ActivatedRoute, public juegoService: JuegoService, public metricaService: MetricaService, public variablesService: VariablesService) {
   }
 
@@ -26,21 +28,23 @@ export class PageMetricasComponent implements OnInit, AfterViewInit {
     this.getJuego();
     this.getMetricas();
     this.getVariables();
+     
   }
   ngAfterViewInit() {
-    this.getMetricas(2);
-
+    this.getMetricas();
+    console.log(this.chart0);
   }
-  getVariables(){
-    
+
+  getVariables() {
+
     this.variablesService.getVariables()
       .subscribe(res => {
         this.variablesService.variables = res as Variables[];
-        console.log(this.variablesService.variables );
+        console.log(this.variablesService.variables);
 
       })
   }
-  addVariable(){
+  addVariable() {
     //console.log(this.juegoService.selectedJuego);
     if (this.variablesService.selectedVariable.id_metrica_valores && this.variablesService.selectedVariable.id_metrica_valores != '') {
       console.log("aylmao");
@@ -64,11 +68,11 @@ export class PageMetricasComponent implements OnInit, AfterViewInit {
       console.log(this.juegoService.selectedJuego);
     });
   }
-  editVariable(variable){
+  editVariable(variable) {
     console.log(variable);
     this.variablesService.selectedVariable = variable;
   }
-  deleteVariable(variable){
+  deleteVariable(variable) {
     console.log(variable);
     if (confirm('¿Está segur@ de que quiere eliminar la variable?')) {
       this.variablesService.deleteVariable(variable.id_metrica_valores).subscribe(res => {
@@ -78,34 +82,89 @@ export class PageMetricasComponent implements OnInit, AfterViewInit {
     }
 
   }
-  getMetricas(flag = 1) {
+
+  getMetricas(flag = 2) {
     this.metricaService.getMetricas()
       .subscribe(res => {
+        this.canvases = [];
         this.metricaService.metricas = res as Metrica[];
-        console.log(this.metricaService.metricas);
-        console.log(flag);
-        if (flag == 2){
-          for (let metrica of this.metricaService.metricas) {
+        for (let metrica of this.metricaService.metricas) {
+            let metrica2: any = {}; 
+            metrica2.id = (metrica.id_metrica);
+            metrica2.nombre = metrica.nombre;
+            this.canvases.push(metrica2);
+
             metrica.canvas = "canvas" + metrica.id_metrica;
-            this.crearCharts(metrica);
-          }
+          
         }
-      })
+        console.log(this.metricaService.metricas);
+        console.log(this.canvases);
+        if (true) {
+          console.log("Metricas con flag == 2");
+          for (let i = 0; i < this.metricaService.metricas.length; i++) {
+            console.log("holo");
+
+            this.metricaService.metricas[i] = this.crearCharts(this.metricaService.metricas[i]);
+
+          }
+        
+          console.log(this.metricaService.metricas);
+          this.chart0 = new Chart('canvas0', {
+            type: 'bar',
+            data: {
+              labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+              datasets: [{
+                label: '# of Votes',
+                data: [12, 19, 3, 5, 2, 3],
+                backgroundColor: [
+                  'rgba(255, 99, 132, 0.2)',
+                  'rgba(54, 162, 235, 0.2)',
+                  'rgba(255, 206, 86, 0.2)',
+                  'rgba(75, 192, 192, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                  'rgba(255,99,132,1)',
+                  'rgba(54, 162, 235, 1)',
+                  'rgba(255, 206, 86, 1)',
+                  'rgba(75, 192, 192, 1)',
+                  'rgba(153, 102, 255, 1)',
+                  'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+              }]
+            },
+            options: {
+              scales: {
+                yAxes: [{
+                  ticks: {
+                    beginAtZero: true
+                  }
+                }]
+              }
+            }
+          });
+          console.log(this.chart0);
+          console.log(this.metricaService.metricas[0].chart);
+
+        }
+        
+      });
   }
-  cleanVarForm(){
-    this.variablesService.selectedVariable = new Variables; 
+  cleanVarForm() {
+    this.variablesService.selectedVariable = new Variables;
   }
   crearCharts(metrica) {
-    
     metrica.chart = new Chart(metrica.canvas, {
       type: 'bar',
       data: {
         labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
         datasets: [{
           label: '# of Votes',
-          data: metrica.datosX,
+          data: [14, 24, 3, 5, 2, 3],
           backgroundColor: [
-            'rgba(255, 99, 132, 0.2)',
+            'rgba(0, 99, 132, 0.2)',
             'rgba(54, 162, 235, 0.2)',
             'rgba(255, 206, 86, 0.2)',
             'rgba(75, 192, 192, 0.2)',
@@ -133,6 +192,8 @@ export class PageMetricasComponent implements OnInit, AfterViewInit {
         }
       }
     });
+    return metrica;
+
     /*
     //buscamos la metrica y la metemos
     console.log(metrica);
@@ -145,8 +206,6 @@ export class PageMetricasComponent implements OnInit, AfterViewInit {
     console.log("Fin de crear metrica?");
     console.log(this.metricaService.metricas);
 */
-  }
-  async poblarMetrica(metrica) {
   }
   addMetrica() {
     this.metricaService.selectedMetrica.juego = this.game;
@@ -167,7 +226,7 @@ export class PageMetricasComponent implements OnInit, AfterViewInit {
   cleanForm() {
     this.metricaService.selectedMetrica = new Metrica;
   }
-  editMetrica(metrica){
+  editMetrica(metrica) {
     console.log(metrica);
     this.metricaService.selectedMetrica = metrica;
     console.log(this.metricaService.selectedMetrica);

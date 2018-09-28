@@ -6,7 +6,7 @@ export class Metrica {
         this.tipo = tipo;
         this.juego = juego;
         this.data_created = data_created;
-        this.chart = [];
+        this.chart = {};
         this.canvas = "";
         this.variables = []; 
     }

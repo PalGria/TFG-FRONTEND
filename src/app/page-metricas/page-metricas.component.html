@@ -8,6 +8,16 @@
 
 <div class="container">
     <div class="row">
+            <div class="col-6 metrica" *ngFor = "let metrica of canvases">
+                    <h5>CANVAS {{metrica.id}} </h5>
+                    <div>
+                        {{metrica.nombre}}
+                        <canvas id="{{'canvas' + metrica.id}}"></canvas>
+       
+                    </div>
+                </div>        
+
+        
         <div class="col-6 metrica" *ngFor="let metrica of metricaService.metricas">
             <div class="icons">
                 <i class="material-icons delete" (click)="deleteMetrica(metrica)">clear</i>
@@ -15,11 +25,12 @@
             </div>
 
             <h5>{{metrica.nombre}}</h5>
-            <div>
+            <div *ngIf = "metrica.chart">
                 {{metrica.canvas}}
-                <canvas id="{{metrica.canvas}}">{{ metrica.chart }}</canvas>
+                <canvas id="{{'canvas' + metrica.id_metrica}}"></canvas>
             </div>
         </div>
+
     </div>
 </div>
 
@@ -105,7 +116,8 @@
 
                             <!-- esto tiene que ser lo que viene a ser un select con los tipos de metrica-->
                             <div class="modal-footer">
-                                <button (click)="addVariable()" type="button" class="btn btn-primary" data-toggle="collapse" data-target="#collapseAdminVars">Guardar
+                                <button (click)="addVariable()" type="button" class="btn btn-primary" data-toggle="collapse"
+                                    data-target="#collapseAdminVars">Guardar
                                     cambios
                                 </button>
                             </div>
@@ -131,8 +143,8 @@
                             <td>{{variable.nombre}}</td>
                             <td>
                                 <i class="material-icons delete" (click)="deleteVariable(variable)">clear</i>
-                                <i class="material-icons edit" (click)="editVariable(variable)" data-toggle="collapse" data-target="#collapseAdminVars"
-                                aria-expanded="false" aria-controls="collapseAdminVars">create</i>
+                                <i class="material-icons edit" (click)="editVariable(variable)" data-toggle="collapse"
+                                    data-target="#collapseAdminVars" aria-expanded="false" aria-controls="collapseAdminVars">create</i>
                             </td>
                             <td>{{variable.X}}</td>
                             <td>{{variable.Y}}</td>
