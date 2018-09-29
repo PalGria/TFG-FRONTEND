@@ -1,35 +1,23 @@
 <div class="botones">
-    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#metricaModal" (click)="cleanForm()">Añadir
-        métrica </button>
-    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#variablesModal">Administrar
-        variables </button>
+    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#metricaModal" (click)="cleanForm()">Añadir métrica </button>
+    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#variablesModal">Administrar variables </button>
 
 </div>
 
 <div class="container">
     <div class="row">
-            <div class="col-6 metrica" *ngFor = "let metrica of canvases">
-                    <h5>CANVAS {{metrica.id}} </h5>
-                    <div>
-                        {{metrica.nombre}}
-                        <canvas id="{{'canvas' + metrica.id}}"></canvas>
-       
-                    </div>
-                </div>        
-
-        
-        <div class="col-6 metrica" *ngFor="let metrica of metricaService.metricas">
+        <div class="col-6 metrica" *ngFor="let metrica of canvases">
             <div class="icons">
                 <i class="material-icons delete" (click)="deleteMetrica(metrica)">clear</i>
                 <i class="material-icons edit" (click)="editMetrica(metrica)" data-toggle="modal" data-target="#metricaModal">create</i>
             </div>
-
-            <h5>{{metrica.nombre}}</h5>
-            <div *ngIf = "metrica.chart">
-                {{metrica.canvas}}
+            <h5>{{metrica.nombre}} </h5>
+            <div>
                 <canvas id="{{'canvas' + metrica.id_metrica}}"></canvas>
+
             </div>
         </div>
+
 
     </div>
 </div>
@@ -56,8 +44,8 @@
                     </select>
                     <div>
                         <div style="margin-bottom: 5px">Variables:</div>
-                        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample"
-                            aria-expanded="false" aria-controls="collapseExample">
+                        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false"
+                            aria-controls="collapseExample">
                             Añadir variables
                         </button>
                     </div>
@@ -70,8 +58,7 @@
                     <!-- esto tiene que ser lo que viene a ser un select con los tipos de metrica-->
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                        <button (click)="addMetrica()" type="button" class="btn btn-primary" data-dismiss="modal">Guardar
-                            cambios
+                        <button (click)="addMetrica()" type="button" class="btn btn-primary" data-dismiss="modal">Guardar cambios
                         </button>
                     </div>
 
@@ -81,8 +68,7 @@
     </div>
 </div>
 <!-- Modal Variables-->
-<div class="modal fade" id="variablesModal" tabindex="-1" role="dialog" aria-labelledby="variablesModalLabel"
-    aria-hidden="true">
+<div class="modal fade" id="variablesModal" tabindex="-1" role="dialog" aria-labelledby="variablesModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -94,8 +80,8 @@
 
 
             <div class="modal-body">
-                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseAdminVars"
-                    aria-expanded="false" aria-controls="collapseAdminVars">
+                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseAdminVars" aria-expanded="false"
+                    aria-controls="collapseAdminVars">
                     Añadir variable
                 </button>
                 <div class="collapse" id="collapseAdminVars">
@@ -103,8 +89,7 @@
                         <form class="form-group" #menuForm="ngForm">
                             <input type="hidden" name="id" #id="ngModel" [(ngModel)]="variablesService.selectedVariable.id_metrica_valores">
                             <label for="nombre" class="col-form-label">Título:</label>
-                            <input type="text" class="form-control" id="nombre" name="nombre" #titulo="ngModel"
-                                [(ngModel)]="variablesService.selectedVariable.nombre">
+                            <input type="text" class="form-control" id="nombre" name="nombre" #titulo="ngModel" [(ngModel)]="variablesService.selectedVariable.nombre">
                             <div>
                                 <div style="margin-bottom: 5px">Variables:</div>
                             </div>
@@ -116,9 +101,7 @@
 
                             <!-- esto tiene que ser lo que viene a ser un select con los tipos de metrica-->
                             <div class="modal-footer">
-                                <button (click)="addVariable()" type="button" class="btn btn-primary" data-toggle="collapse"
-                                    data-target="#collapseAdminVars">Guardar
-                                    cambios
+                                <button (click)="addVariable()" type="button" class="btn btn-primary" data-toggle="collapse" data-target="#collapseAdminVars">Guardar cambios
                                 </button>
                             </div>
 
@@ -143,8 +126,8 @@
                             <td>{{variable.nombre}}</td>
                             <td>
                                 <i class="material-icons delete" (click)="deleteVariable(variable)">clear</i>
-                                <i class="material-icons edit" (click)="editVariable(variable)" data-toggle="collapse"
-                                    data-target="#collapseAdminVars" aria-expanded="false" aria-controls="collapseAdminVars">create</i>
+                                <i class="material-icons edit" (click)="editVariable(variable)" data-toggle="collapse" data-target="#collapseAdminVars" aria-expanded="false"
+                                    aria-controls="collapseAdminVars">create</i>
                             </td>
                             <td>{{variable.X}}</td>
                             <td>{{variable.Y}}</td>
