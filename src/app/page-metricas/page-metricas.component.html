@@ -52,9 +52,16 @@
                     <div class="collapse" id="collapseExample">
                         <div class="card card-body">
                             Metemos aquí lo que viene siendo las variables totales.
+                            <div>
+                                    <span class= 'variable-metrica'>Var1</span>
+                                    <span class= 'variable-metrica'>Var1</span>
+                                    <span class= 'variable-metrica'>Var1</span>
+                                    <span class= 'variable-metrica'>Var1</span>
+    
+                            </div>
                         </div>
+        
                     </div>
-
                     <!-- esto tiene que ser lo que viene a ser un select con los tipos de metrica-->
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
@@ -90,9 +97,6 @@
                             <input type="hidden" name="id" #id="ngModel" [(ngModel)]="variablesService.selectedVariable.id_metrica_valores">
                             <label for="nombre" class="col-form-label">Título:</label>
                             <input type="text" class="form-control" id="nombre" name="nombre" #titulo="ngModel" [(ngModel)]="variablesService.selectedVariable.nombre">
-                            <div>
-                                <div style="margin-bottom: 5px">Variables:</div>
-                            </div>
                             <div class="collapse" id="collapseExample">
                                 <div class="card card-body">
                                     Metemos aquí lo que viene siendo las variables totales.
@@ -112,7 +116,7 @@
                     <thead>
                         <tr>
                             <th scope="col">Id</th>
-                            <th scope="col">Nombre Variable</th>
+                            <th scope="col">Nombre variable</th>
                             <th scope="col"></th>
                             <th scope="col">X</th>
                             <th scope="col">Y</th>

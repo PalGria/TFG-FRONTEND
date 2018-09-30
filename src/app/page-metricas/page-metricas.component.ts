@@ -46,6 +46,7 @@ export class PageMetricasComponent implements OnInit, AfterViewInit {
   }
   addVariable() {
     //console.log(this.juegoService.selectedJuego);
+    this.variablesService.selectedVariable.juego = this.game;
     if (this.variablesService.selectedVariable.id_metrica_valores && this.variablesService.selectedVariable.id_metrica_valores != '') {
       console.log("aylmao");
       this.variablesService.editVariable(this.variablesService.selectedVariable).subscribe(res => {
