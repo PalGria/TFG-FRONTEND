@@ -63,6 +63,14 @@ export class PageMetricasComponent implements OnInit, AfterViewInit {
       });
     }
   }
+  addVariableToMetrica (metrica, valor) { 
+    this.metricaService.addValorToMetrica(metrica, valor).subscribe(res => {
+      //get variables de metrica (pero no metricas)
+      console.log('ey');
+      console.log(res);
+    });
+
+  }
   getJuego() {
     this.juegoService.getJuego(this.game).subscribe(res => {
       this.juegoService.selectedJuego = (res as Juego)[0];

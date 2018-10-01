@@ -42,7 +42,7 @@
                         <option selected disabled>{{metricaService.selectedMetrica.tipo}}</option>
                         <option *ngFor="let tipo of tipos">{{tipo}}</option>
                     </select>
-                    <div>
+                    <div *ngIf = 'metricaService.selectedMetrica.id_metrica'>
                         <div style="margin-bottom: 5px">Variables:</div>
                         <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false"
                             aria-controls="collapseExample">
@@ -53,11 +53,7 @@
                         <div class="card card-body">
                             Metemos aquí lo que viene siendo las variables totales.
                             <div>
-                                    <span class= 'variable-metrica'>Var1</span>
-                                    <span class= 'variable-metrica'>Var1</span>
-                                    <span class= 'variable-metrica'>Var1</span>
-                                    <span class= 'variable-metrica'>Var1</span>
-    
+                                    <span class= 'variable-metrica' *ngFor="let variable of variablesService.variables" (click) = "addVariableToMetrica(metricaService.selectedMetrica, variable)">{{variable.nombre}}</span>    
                             </div>
                         </div>
         

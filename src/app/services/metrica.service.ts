@@ -23,6 +23,14 @@ export class MetricaService {
   addMetrica(metrica){
     return this.http.post(this.URL_API, metrica);
   }
+  addValorToMetrica(metrica, valor){
+    console.log('hey');
+    console.log(this.URL_API + `/${metrica.id_metrica}/valores`, valor);
+    return this.http.post(this.URL_API + `/${metrica.id_metrica}/valores`, valor);
+  }
+  getValoresFromMetrica(metrica){
+    return this.http.get(this.URL_API + `/${metrica.id_metrica}/valores`);
+  }
   editMetrica(metrica){
     return this.http.put(this.URL_API + `/${metrica.id_metrica}`, metrica);
   }

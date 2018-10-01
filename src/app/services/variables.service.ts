@@ -23,6 +23,9 @@ export class VariablesService {
   addVariable(variable){
     return this.http.post(this.URL_API, variable);
   }
+  addVariableTometrica(variable, metrica){
+    return this.http.post(this.URL_API, {});
+  }
   editVariable(variable){
     return this.http.put(this.URL_API + `/${variable.id_metrica_valores}`, variable);
   }
