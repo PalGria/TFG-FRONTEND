@@ -44,6 +44,7 @@
                     </select>
                     <div *ngIf = 'metricaService.selectedMetrica.id_metrica'>
                         <div style="margin-bottom: 5px">Variables:</div>
+                        <span *ngFor="let wat of selectedMetricaVariables">{{wat.nombre}}</span>
                         <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false"
                             aria-controls="collapseExample">
                             Añadir variables

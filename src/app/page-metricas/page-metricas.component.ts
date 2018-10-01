@@ -17,6 +17,7 @@ import { Variables } from '../models/variables';
 export class PageMetricasComponent implements OnInit, AfterViewInit {
   chart0: any = [];
   canvases: any = [];
+  selectedMetricaVariables: any = [];
   game: number;
   charts: any = {};
   tipos: any = ['bar-vertical', 'bar-horizontal', 'bar-multiaxis', 'line-basic', 'radar', 'pie', 'doghnut'];
@@ -28,7 +29,7 @@ export class PageMetricasComponent implements OnInit, AfterViewInit {
     this.getJuego();
     this.getMetricas();
     this.getVariables();
-
+    
   }
   ngAfterViewInit() {
     this.getMetricas();
@@ -229,7 +230,14 @@ export class PageMetricasComponent implements OnInit, AfterViewInit {
   editMetrica(metrica) {
     console.log(metrica);
     this.metricaService.selectedMetrica = metrica;
+    this.getVariablesFromMetrica(metrica);
     console.log(this.metricaService.selectedMetrica);
+  }
+  getVariablesFromMetrica(metrica){
+    this.metricaService.getValoresFromMetrica(metrica).subscribe(res => {
+      console.log(res);
+      this.selectedMetricaVariables = res;
+    });
   }
   deleteMetrica(metrica) {
     if (confirm('¿Está segur@ de que quiere eliminar la métrica?')) {
