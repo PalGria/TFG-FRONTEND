@@ -10,6 +10,7 @@ export class MetricaService {
   selectedMetrica: Metrica;
   metricas: Metrica[];
   readonly URL_API = 'http://localhost:3000/api/metricas';
+  readonly URL_API2 = 'http://localhost:3000/api/relacionesMetricas'
 
   constructor(private http: HttpClient) {
     this.selectedMetrica = new Metrica();
@@ -24,9 +25,11 @@ export class MetricaService {
     return this.http.post(this.URL_API, metrica);
   }
   addValorToMetrica(metrica, valor){
-    console.log('hey');
-    console.log(this.URL_API + `/${metrica.id_metrica}/valores`, valor);
     return this.http.post(this.URL_API + `/${metrica.id_metrica}/valores`, valor);
+  }
+  deleteValorFromMetrica(id){
+    console.log(id);
+    return this.http.delete(this.URL_API + `/valores/${id}`);
   }
   getValoresFromMetrica(metrica){
     return this.http.get(this.URL_API + `/${metrica.id_metrica}/valores`);

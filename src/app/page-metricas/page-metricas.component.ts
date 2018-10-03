@@ -20,22 +20,48 @@ export class PageMetricasComponent implements OnInit, AfterViewInit {
   selectedMetricaVariables: any = [];
   game: number;
   charts: any = {};
+  colores: any = [];
   tipos: any = ['bar-vertical', 'bar-horizontal', 'bar-multiaxis', 'line-basic', 'radar', 'pie', 'doghnut'];
   constructor(private route: ActivatedRoute, public juegoService: JuegoService, public metricaService: MetricaService, public variablesService: VariablesService) {
   }
 
   async ngOnInit() {
+    this.initColors();
     this.game = +this.route.snapshot.params["id"];
     this.getJuego();
     this.getMetricas();
     this.getVariables();
-    
+
   }
   ngAfterViewInit() {
     this.getMetricas();
     console.log(this.chart0);
   }
+  initColors() {
+    let nombreColor = ['azul', 'verde', 'rojo'];
+    let hex = ['#418cf4', '#26ce1a', '#f46242'];
+    for (let i = 0; i < nombreColor.length; i++) {
+      let color = {
+        "nombre": nombreColor[i],
+        "hex": hex[i],
+      }
+      this.colores.push(color);
+    }
 
+  }
+  selectColor(color, variable) {
+    console.log(color);
+    variable.color = color; 
+    console.log(variable);
+
+    if (variable.id_metrica_valores && variable.id_metrica_valores != '') {
+      this.variablesService.editVariable(variable).subscribe(res => {
+        this.getVariables();
+        this.cleanVarForm()
+        console.log(res);
+      });
+    }
+  }
   getVariables() {
 
     this.variablesService.getVariables()
@@ -46,10 +72,8 @@ export class PageMetricasComponent implements OnInit, AfterViewInit {
       })
   }
   addVariable() {
-    //console.log(this.juegoService.selectedJuego);
     this.variablesService.selectedVariable.juego = this.game;
     if (this.variablesService.selectedVariable.id_metrica_valores && this.variablesService.selectedVariable.id_metrica_valores != '') {
-      console.log("aylmao");
       this.variablesService.editVariable(this.variablesService.selectedVariable).subscribe(res => {
         this.getVariables();
         this.cleanVarForm()
@@ -58,19 +82,27 @@ export class PageMetricasComponent implements OnInit, AfterViewInit {
     }
     else {
       this.variablesService.addVariable(this.variablesService.selectedVariable).subscribe(res => {
+        console.log(this.variablesService.selectedVariable);
         this.getVariables();
         this.cleanVarForm()
         console.log(res);
       });
     }
   }
-  addVariableToMetrica (metrica, valor) { 
+  addVariableToMetrica(metrica, valor) {
     this.metricaService.addValorToMetrica(metrica, valor).subscribe(res => {
       //get variables de metrica (pero no metricas)
-      console.log('ey');
+      this.getVariablesFromMetrica(metrica);
       console.log(res);
     });
+  }
+  deleteVariableFromMetrica(valor) {
+    console.log(valor);
+    this.metricaService.deleteValorFromMetrica(valor.id_relacion).subscribe(res => {
+      console.log(res)
+      this.getVariablesFromMetrica(this.metricaService.selectedMetrica);
 
+    });
   }
   getJuego() {
     this.juegoService.getJuego(this.game).subscribe(res => {
@@ -99,7 +131,7 @@ export class PageMetricasComponent implements OnInit, AfterViewInit {
       .subscribe(res => {
         console.log(this.canvases);
         this.metricaService.metricas = res as Metrica[];
-        if(this.canvases.length < this.metricaService.metricas.length){
+        if (this.canvases.length < this.metricaService.metricas.length) {
           for (let metrica of this.metricaService.metricas) {
             this.canvases.push(metrica);
           }
@@ -108,7 +140,7 @@ export class PageMetricasComponent implements OnInit, AfterViewInit {
         for (let i = 0; i < this.metricaService.metricas.length; i++) {
           console.log("holo");
           this.metricaService.metricas[i].canvas = "canvas" + this.metricaService.metricas[i].id_metrica;
-          this.metricaService.metricas[i] = this.crearCharts(this.metricaService.metricas[i]);
+          this.crearCharts(this.metricaService.metricas[i]);
         }
         this.chart0 = new Chart('canvas0', {
           type: 'bar',
@@ -157,47 +189,54 @@ export class PageMetricasComponent implements OnInit, AfterViewInit {
     this.variablesService.selectedVariable = new Variables;
   }
   crearCharts(metrica) {
-    metrica.chart = new Chart(metrica.canvas, {
-      type: 'bar',
-      data: {
-        labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-        datasets: [{
-          label: '# of Votes',
-          data: [14, 24, 3, 5, 2, 3],
-          backgroundColor: [
-            'rgba(0, 99, 132, 0.2)',
-            'rgba(54, 162, 235, 0.2)',
-            'rgba(255, 206, 86, 0.2)',
-            'rgba(75, 192, 192, 0.2)',
-            'rgba(153, 102, 255, 0.2)',
-            'rgba(255, 159, 64, 0.2)'
-          ],
-          borderColor: [
-            'rgba(255,99,132,1)',
-            'rgba(54, 162, 235, 1)',
-            'rgba(255, 206, 86, 1)',
-            'rgba(75, 192, 192, 1)',
-            'rgba(153, 102, 255, 1)',
-            'rgba(255, 159, 64, 1)'
-          ],
-          borderWidth: 1
-        }]
-      },
-      options: {
-        scales: {
-          yAxes: [{
-            ticks: {
-              beginAtZero: true
-            }
+    console.log(metrica);
+    this.metricaService.getValoresFromMetrica(metrica).subscribe(res => {
+      console.log(res);
+      metrica.variables = res;
+      console.log(metrica.variables);
+      metrica.chart = new Chart(metrica.canvas, {
+        type: 'bar',
+        data: {
+          labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+          datasets: [{
+            label: '# of Votes',
+            data: [14, 24, 3, 5, 2, 3],
+            backgroundColor: [
+              '#4286f4',
+              'rgba(54, 162, 235, 0.2)',
+              'rgba(255, 206, 86, 0.2)',
+              'rgba(75, 192, 192, 0.2)',
+              'rgba(153, 102, 255, 0.2)',
+              'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+              'rgba(255,99,132,1)',
+              'rgba(54, 162, 235, 1)',
+              'rgba(255, 206, 86, 1)',
+              'rgba(75, 192, 192, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
           }]
+        },
+        options: {
+          scales: {
+            yAxes: [{
+              ticks: {
+                beginAtZero: true
+              }
+            }]
+          }
         }
-      }
+      });
+      return metrica;
+
     });
-    return metrica;
 
     /*
     //buscamos la metrica y la metemos
-    console.log(metrica);
+    fog(metrica);
     for (let i = 0; i < this.metricaService.metricas.length; i++) {
       if (this.metricaService.metricas[i].id_metrica == metrica.id_metrica) {
         this.metricaService.metricas[i] = metrica;
@@ -212,8 +251,8 @@ export class PageMetricasComponent implements OnInit, AfterViewInit {
     this.metricaService.selectedMetrica.juego = this.game;
     if (this.metricaService.selectedMetrica.id_metrica && this.metricaService.selectedMetrica.id_metrica != '') {
       console.log("aylmao");
-      let metrica = this.metricaService.selectedMetrica; 
-      metrica.chart = []; 
+      let metrica = this.metricaService.selectedMetrica;
+      metrica.chart = [];
       this.metricaService.editMetrica(metrica).subscribe(res => {
         location.reload();
       });
@@ -233,7 +272,7 @@ export class PageMetricasComponent implements OnInit, AfterViewInit {
     this.getVariablesFromMetrica(metrica);
     console.log(this.metricaService.selectedMetrica);
   }
-  getVariablesFromMetrica(metrica){
+  getVariablesFromMetrica(metrica) {
     this.metricaService.getValoresFromMetrica(metrica).subscribe(res => {
       console.log(res);
       this.selectedMetricaVariables = res;
@@ -246,7 +285,7 @@ export class PageMetricasComponent implements OnInit, AfterViewInit {
         location.reload();
       });
     }
-    
+
   }
 
 }
