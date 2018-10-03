@@ -27,6 +27,9 @@ export class MetricaService {
   addValorToMetrica(metrica, valor){
     return this.http.post(this.URL_API + `/${metrica.id_metrica}/valores`, valor);
   }
+  editValorToMetrica(variable){
+    return this.http.put(this.URL_API + `/${variable.id_relacion}/valores`, variable);
+  }
   deleteValorFromMetrica(id){
     console.log(id);
     return this.http.delete(this.URL_API + `/valores/${id}`);

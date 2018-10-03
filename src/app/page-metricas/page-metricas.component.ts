@@ -21,7 +21,7 @@ export class PageMetricasComponent implements OnInit, AfterViewInit {
   game: number;
   charts: any = {};
   colores: any = [];
-  tipos: any = ['bar-vertical', 'bar-horizontal', 'bar-multiaxis', 'line-basic', 'radar', 'pie', 'doghnut'];
+  tipos: any = ['horizontalBar','bar','line', 'radar', 'pie','doghnut'];
   constructor(private route: ActivatedRoute, public juegoService: JuegoService, public metricaService: MetricaService, public variablesService: VariablesService) {
   }
 
@@ -35,11 +35,10 @@ export class PageMetricasComponent implements OnInit, AfterViewInit {
   }
   ngAfterViewInit() {
     this.getMetricas();
-    console.log(this.chart0);
   }
   initColors() {
     let nombreColor = ['azul', 'verde', 'rojo'];
-    let hex = ['#418cf4', '#26ce1a', '#f46242'];
+    let hex = ['#4286f4', '#26ce1a', '#f46242'];
     for (let i = 0; i < nombreColor.length; i++) {
       let color = {
         "nombre": nombreColor[i],
@@ -47,15 +46,14 @@ export class PageMetricasComponent implements OnInit, AfterViewInit {
       }
       this.colores.push(color);
     }
+    console.log(this.colores);
 
   }
   selectColor(color, variable) {
-    console.log(color);
     variable.color = color; 
     console.log(variable);
-
     if (variable.id_metrica_valores && variable.id_metrica_valores != '') {
-      this.variablesService.editVariable(variable).subscribe(res => {
+      this.metricaService.editValorToMetrica(variable).subscribe(res => {
         this.getVariables();
         this.cleanVarForm()
         console.log(res);
@@ -82,7 +80,6 @@ export class PageMetricasComponent implements OnInit, AfterViewInit {
     }
     else {
       this.variablesService.addVariable(this.variablesService.selectedVariable).subscribe(res => {
-        console.log(this.variablesService.selectedVariable);
         this.getVariables();
         this.cleanVarForm()
         console.log(res);
@@ -97,7 +94,6 @@ export class PageMetricasComponent implements OnInit, AfterViewInit {
     });
   }
   deleteVariableFromMetrica(valor) {
-    console.log(valor);
     this.metricaService.deleteValorFromMetrica(valor.id_relacion).subscribe(res => {
       console.log(res)
       this.getVariablesFromMetrica(this.metricaService.selectedMetrica);
@@ -107,15 +103,12 @@ export class PageMetricasComponent implements OnInit, AfterViewInit {
   getJuego() {
     this.juegoService.getJuego(this.game).subscribe(res => {
       this.juegoService.selectedJuego = (res as Juego)[0];
-      console.log(this.juegoService.selectedJuego);
     });
   }
   editVariable(variable) {
-    console.log(variable);
     this.variablesService.selectedVariable = variable;
   }
   deleteVariable(variable) {
-    console.log(variable);
     if (confirm('¿Está segur@ de que quiere eliminar la variable?')) {
       this.variablesService.deleteVariable(variable.id_metrica_valores).subscribe(res => {
         this.getVariables();
@@ -129,59 +122,18 @@ export class PageMetricasComponent implements OnInit, AfterViewInit {
     this.canvases = [];
     this.metricaService.getMetricas()
       .subscribe(res => {
-        console.log(this.canvases);
         this.metricaService.metricas = res as Metrica[];
         if (this.canvases.length < this.metricaService.metricas.length) {
           for (let metrica of this.metricaService.metricas) {
             this.canvases.push(metrica);
           }
         }
-        console.log(this.canvases);
         for (let i = 0; i < this.metricaService.metricas.length; i++) {
-          console.log("holo");
           this.metricaService.metricas[i].canvas = "canvas" + this.metricaService.metricas[i].id_metrica;
           this.crearCharts(this.metricaService.metricas[i]);
         }
-        this.chart0 = new Chart('canvas0', {
-          type: 'bar',
-          data: {
-            labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-            datasets: [{
-              label: '# of Votes',
-              data: [12, 19, 3, 5, 2, 3],
-              backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(255, 159, 64, 0.2)'
-              ],
-              borderColor: [
-                'rgba(255,99,132,1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)'
-              ],
-              borderWidth: 1
-            }]
-          },
-          options: {
-            scales: {
-              yAxes: [{
-                ticks: {
-                  beginAtZero: true
-                }
-              }]
-            }
-          }
-        });
+
         console.log(this.canvases);
-        console.log(this.metricaService.metricas[0].chart);
-
-
 
       });
   }
@@ -193,30 +145,25 @@ export class PageMetricasComponent implements OnInit, AfterViewInit {
     this.metricaService.getValoresFromMetrica(metrica).subscribe(res => {
       console.log(res);
       metrica.variables = res;
-      console.log(metrica.variables);
+      let nombres = [];
+      let colores = []; 
+      let datos = []; 
+      for (let variable of metrica.variables){
+        nombres.push (variable.nombre);
+        colores.push(variable.color_rel);
+        datos.push(variable.X);
+
+      } 
+      console.log(metrica);
       metrica.chart = new Chart(metrica.canvas, {
-        type: 'bar',
+        type: metrica.tipo,
         data: {
-          labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+          labels: nombres,
           datasets: [{
             label: '# of Votes',
-            data: [14, 24, 3, 5, 2, 3],
-            backgroundColor: [
-              '#4286f4',
-              'rgba(54, 162, 235, 0.2)',
-              'rgba(255, 206, 86, 0.2)',
-              'rgba(75, 192, 192, 0.2)',
-              'rgba(153, 102, 255, 0.2)',
-              'rgba(255, 159, 64, 0.2)'
-            ],
-            borderColor: [
-              'rgba(255,99,132,1)',
-              'rgba(54, 162, 235, 1)',
-              'rgba(255, 206, 86, 1)',
-              'rgba(75, 192, 192, 1)',
-              'rgba(153, 102, 255, 1)',
-              'rgba(255, 159, 64, 1)'
-            ],
+            data: datos,
+            backgroundColor: colores,
+            borderColor: colores,
             borderWidth: 1
           }]
         },
