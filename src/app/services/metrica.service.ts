@@ -15,8 +15,12 @@ export class MetricaService {
   constructor(private http: HttpClient) {
     this.selectedMetrica = new Metrica();
    }
+   
    getMetricas(){
     return this.http.get(this.URL_API);
+  }
+  getMetricasFromJuego(juego){
+    return this.http.get(this.URL_API + `/juego/${juego}`);
   }
   getMetrica(id){
     return this.http.get(this.URL_API + `/${id}`);

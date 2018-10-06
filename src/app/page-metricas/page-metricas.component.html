@@ -83,7 +83,6 @@
                     </div>
                     <div class="collapse" id="collapseExample">
                         <div class="card card-body">
-                            Metemos aquí lo que viene siendo las variables totales.
                             <div>
                                 <span class='variable-metrica' *ngFor="let variable of variablesService.variables"
                                     (click)="addVariableToMetrica(metricaService.selectedMetrica, variable)">{{variable.nombre}}</span>

@@ -120,7 +120,7 @@ export class PageMetricasComponent implements OnInit, AfterViewInit {
 
   getMetricas(flag = 2) {
     this.canvases = [];
-    this.metricaService.getMetricas()
+    this.metricaService.getMetricasFromJuego(this.game)
       .subscribe(res => {
         this.metricaService.metricas = res as Metrica[];
         if (this.canvases.length < this.metricaService.metricas.length) {
@@ -160,7 +160,7 @@ export class PageMetricasComponent implements OnInit, AfterViewInit {
         data: {
           labels: nombres,
           datasets: [{
-            label: '# of Votes',
+            label: '',
             data: datos,
             backgroundColor: colores,
             borderColor: colores,
@@ -197,7 +197,6 @@ export class PageMetricasComponent implements OnInit, AfterViewInit {
   addMetrica() {
     this.metricaService.selectedMetrica.juego = this.game;
     if (this.metricaService.selectedMetrica.id_metrica && this.metricaService.selectedMetrica.id_metrica != '') {
-      console.log("aylmao");
       let metrica = this.metricaService.selectedMetrica;
       metrica.chart = [];
       this.metricaService.editMetrica(metrica).subscribe(res => {
@@ -206,6 +205,7 @@ export class PageMetricasComponent implements OnInit, AfterViewInit {
     }
     else {
       this.metricaService.addMetrica(this.metricaService.selectedMetrica).subscribe(res => {
+        //console.log(res);
         location.reload();
       });
     }
